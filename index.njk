@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title or "Destino" }}</title>
+    <meta name="google" content="notranslate" />
+    <link rel="shortcut icon" href="{{ "assets/favicon.webp" | url }}" type="image/x-icon" />
+    <style>
+      *,
+      *::after,
+      *::before {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        height: 100dvh;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        place-content: center;
+        background-image: url('{{ "assets/stars.jpg" | url }}');
+        background-size: 400px;
+        transform-style: preserve-3d;
+        perspective: 10000px;
+        overflow: hidden;
+      }
+
+      .container {
+        width: 110px;
+        height: 110px;
+        transform-style: preserve-3d;
+        perspective: 10000px;
+        animation: girar 10s linear infinite;
+      }
+
+      @media (width <= 1111px) {
+        .container {
+          zoom: 0.6;
+        }
+      }
+
+      .cube {
+        width: 110px;
+        height: 110px;
+        position: relative;
+        z-index: 20;
+        transform-style: preserve-3d;
+        perspective: 10000px;
+      }
+
+      .side {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-color: #000;
+      }
+
+      .side::before {
+        content: '';
+        display: block;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background-image: repeating-conic-gradient(
+          from 0deg at 100% 100%,
+          #e81cff 0 10deg,
+          #aefb2a 10deg 20deg
+        );
+        backdrop-filter: blur(100px);
+      }
+
+      .side.front { transform: none; }
+      .side.behind { transform: translateZ(-110px); }
+      .side.right { transform-origin: 100% 0%; transform: rotateY(-90deg); }
+      .side.left { transform-origin: 0% 0%; transform: rotateY(90deg); }
+      .side.top { transform-origin: 50% 0%; transform: rotateX(-90deg); }
+      .side.bottom { transform-origin: 50% 100%; transform: rotateX(90deg); }
+
+      @keyframes girar {
+        0% {
+          transform: rotateX(0deg) rotateY(0deg);
+        }
+        100% {
+          transform: rotateX(359deg) rotateY(359deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <aside class="cube">
+        {% for face in ["front", "behind", "right", "left", "top", "bottom"] %}
+          <div class="side {{ face }}"></div>
+        {% endfor %}
+      </aside>
+    </div>
+  </body>
+</html>
